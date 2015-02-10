@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="jwild-ui:war">
+    <output-path>$PROJECT_DIR$/jwild-ui/target</output-path>
+    <root id="archive" name="jwild-ui-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="jwild-ui:war exploded" />
+    </root>
+  </artifact>
+</component>

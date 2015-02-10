@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/jwild.iml" filepath="$PROJECT_DIR$/jwild.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jwild-backend/jwild-backend.iml" filepath="$PROJECT_DIR$/jwild-backend/jwild-backend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jwild-production/jwild-production.iml" filepath="$PROJECT_DIR$/jwild-production/jwild-production.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jwild-ui/jwild-ui.iml" filepath="$PROJECT_DIR$/jwild-ui/jwild-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jwild-widgetset/jwild-widgetset.iml" filepath="$PROJECT_DIR$/jwild-widgetset/jwild-widgetset.iml" />
+    </modules>
+  </component>
+</project>

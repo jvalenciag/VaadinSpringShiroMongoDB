@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact name="jwild-widgetset:GWT">
+    <output-path>$PROJECT_DIR$/jwild-widgetset/target/classes/VAADIN/widgetsets</output-path>
+    <root id="root">
+      <element id="directory" name="VAADIN">
+        <element id="directory" name="widgetsets">
+          <element id="gwt-compiler-output" facet="jwild-widgetset/gwt/GWT" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
