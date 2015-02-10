@@ -1,29 +1,13 @@
 package com.jvg.samples.crud;
 
-import java.util.Collection;
-
 import com.jvg.samples.ResetButtonForTextField;
 import com.jvg.samples.backend.DataService;
 import com.jvg.samples.backend.data.Product;
-
-import com.vaadin.data.Container;
-import com.vaadin.event.FieldEvents;
-import com.vaadin.event.SelectionEvent;
-import com.vaadin.event.SelectionEvent.SelectionListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.Grid.SelectionModel;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -45,7 +29,7 @@ import javax.annotation.PostConstruct;
 public class SampleCrudView extends CssLayout implements View {
 
     public static final String VIEW_NAME = "Inventory";
-    private ProductGrid grid;
+    private ProductTable table;
     private ProductForm form;
 
     @Autowired
@@ -62,19 +46,19 @@ public class SampleCrudView extends CssLayout implements View {
 
         viewLogic = new SampleCrudLogic(this,dataService);
 
-        grid = new ProductGrid((Container.Indexed)dataService.getProductsContainer());
-        grid.addSelectionListener(event -> viewLogic.rowSelected(grid.getSelectedRow()));
+        table = new ProductTable(dataService.getProductsContainer());
+        table.addValueChangeListener(event -> viewLogic.rowSelected(table.getValue()));
 
         form = new ProductForm(viewLogic,dataService);
         form.setCategories(dataService.getAllCategories());
 
         VerticalLayout barAndGridLayout = new VerticalLayout();
         barAndGridLayout.addComponent(topLayout);
-        barAndGridLayout.addComponent(grid);
+        barAndGridLayout.addComponent(table);
         barAndGridLayout.setMargin(true);
         barAndGridLayout.setSpacing(true);
         barAndGridLayout.setSizeFull();
-        barAndGridLayout.setExpandRatio(grid, 1);
+        barAndGridLayout.setExpandRatio(table, 1);
         barAndGridLayout.setStyleName("crud-main-layout");
 
         addComponent(barAndGridLayout);
@@ -89,7 +73,7 @@ public class SampleCrudView extends CssLayout implements View {
         filter.setInputPrompt("Filter");
         ResetButtonForTextField.extend(filter);
         filter.setImmediate(true);
-        filter.addTextChangeListener(event -> grid.setFilter(event.getText()));
+        filter.addTextChangeListener(event -> table.setFilter(event.getText()));
 
         newProduct = new Button("New product");
         newProduct.addStyleName(ValoTheme.BUTTON_PRIMARY);
@@ -125,15 +109,15 @@ public class SampleCrudView extends CssLayout implements View {
     }
 
     public void clearSelection() {
-        grid.getSelectionModel().reset();
+        table.setValue(null);
     }
 
     public void selectRow(Product row) {
-        ((SelectionModel.Single) grid.getSelectionModel()).select(row);
+        table.setValue(row == null ? null : row.getId());
     }
 
     public Product getSelectedRow() {
-        return grid.getSelectedRow();
+        return table.getValue();
     }
 
     public void editProduct(Product product) {
@@ -147,20 +131,20 @@ public class SampleCrudView extends CssLayout implements View {
         form.editProduct(product);
     }
 
-    public void showProducts(Collection<Product> products) {
+    public void showProducts() {
 
-        MongoContainer<Product> mongoContainer = (MongoContainer<Product>)grid.getContainerDataSource();
+        MongoContainer<Product> mongoContainer = (MongoContainer<Product>) table.getContainerDataSource();
         mongoContainer.refresh();
-        //table.refreshRowCache();
+        table.refreshRowCache();
     }
 
-    public void refreshProduct(Product product) {
-        grid.refresh(product);
-        grid.scrollTo(product);
-    }
+    /*public void refreshProduct(Product product) {
+        table.refresh(product);
+        table.scrollTo(product);
+    }*/
 
-    public void removeProduct(Product product) {
-        grid.remove(product);
-    }
+    /*public void removeProduct(Product product) {
+        table.remove(product);
+    }*/
 
 }
