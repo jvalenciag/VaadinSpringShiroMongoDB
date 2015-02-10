@@ -1,5 +1,6 @@
 package com.jvg;
 
+import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 
 import com.jvg.samples.MainScreen;
@@ -8,15 +9,15 @@ import com.jvg.samples.authentication.BasicAccessControl;
 import com.jvg.samples.authentication.LoginScreen;
 import com.jvg.samples.authentication.LoginScreen.LoginListener;
 
-import com.vaadin.annotations.Theme;
-import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.annotations.Viewport;
-import com.vaadin.annotations.Widgetset;
+import com.vaadin.annotations.*;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import ru.xpoft.vaadin.SpringVaadinServlet;
 
 /**
  * Main UI class of the application that shows either the login screen or the
@@ -26,9 +27,12 @@ import com.vaadin.ui.themes.ValoTheme;
  * mobile devices. Instead of device based scaling (default), using responsive
  * layouts.
  */
+@Component("ui")
+@Scope("prototype")
 @Viewport("user-scalable=no,initial-scale=1.0")
 @Theme("mytheme")
 @Widgetset("com.jvg.MyAppWidgetset")
+//@Push
 public class MyUI extends UI {
 
     private AccessControl accessControl = new BasicAccessControl();
@@ -39,12 +43,7 @@ public class MyUI extends UI {
         setLocale(vaadinRequest.getLocale());
         getPage().setTitle("My");
         if (!accessControl.isUserSignedIn()) {
-            setContent(new LoginScreen(accessControl, new LoginListener() {
-                @Override
-                public void loginSuccessful() {
-                    showMainView();
-                }
-            }));
+            setContent(new LoginScreen(accessControl, this::showMainView));
         } else {
             showMainView();
         }
@@ -64,8 +63,11 @@ public class MyUI extends UI {
         return accessControl;
     }
 
-    @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
+    @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true,
+            initParams = {@WebInitParam(name = "systemMessagesBeanName",value = "DEFAULT")
+                    ,@WebInitParam(name = "org.atmosphere.cpr.AtmosphereInterceptor"
+                    ,value = "com.jvg.utils.shiro.SpringShiroInterceptor")})
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
-    public static class MyUIServlet extends VaadinServlet {
+    public static class MyUIServlet extends SpringVaadinServlet {
     }
 }

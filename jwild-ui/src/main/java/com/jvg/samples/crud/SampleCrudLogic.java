@@ -5,6 +5,7 @@ import com.jvg.samples.backend.DataService;
 import com.jvg.samples.backend.data.Product;
 
 import com.vaadin.server.Page;
+import org.bson.types.ObjectId;
 
 /**
  * This class provides an interface for the logical operations between the CRUD
@@ -18,19 +19,22 @@ import com.vaadin.server.Page;
 public class SampleCrudLogic {
 
     private SampleCrudView view;
+    private DataService dataService;
 
-    public SampleCrudLogic(SampleCrudView simpleCrudView) {
+    public SampleCrudLogic(SampleCrudView simpleCrudView, DataService ds) {
         view = simpleCrudView;
+        dataService = ds;
     }
 
     public void init() {
         editProduct(null);
         // Hide and disable if not admin
-        if (!MyUI.get().getAccessControl().isUserInRole("admin")) {
+        //TODO move permissions strings to constants
+        if (!MyUI.get().getAccessControl().isUserPermitted("product:create")) {
             view.setNewProductEnabled(false);
         }
 
-        view.showProducts(DataService.get().getAllProducts());
+        view.showProducts(dataService.getAllProducts());
     }
 
     public void cancelProduct() {
@@ -63,7 +67,7 @@ public class SampleCrudLogic {
                 // Ensure this is selected even if coming directly here from
                 // login
                 try {
-                    int pid = Integer.parseInt(productId);
+                    ObjectId pid = new ObjectId(productId);
                     Product product = findProduct(pid);
                     view.selectRow(product);
                 } catch (NumberFormatException e) {
@@ -72,8 +76,8 @@ public class SampleCrudLogic {
         }
     }
 
-    private Product findProduct(int productId) {
-        return DataService.get().getProductById(productId);
+    private Product findProduct(ObjectId productId) {
+        return dataService.getProductById(productId);
     }
 
     public void saveProduct(Product product) {
@@ -86,7 +90,7 @@ public class SampleCrudLogic {
     }
 
     public void deleteProduct(Product product) {
-        DataService.get().deleteProduct(product.getId());
+        dataService.deleteProduct(product.getId());
         view.showSaveNotification(product.getProductName() + " ("
                 + product.getId() + ") removed");
 
@@ -112,7 +116,7 @@ public class SampleCrudLogic {
     }
 
     public void rowSelected(Product product) {
-        if (MyUI.get().getAccessControl().isUserInRole("admin")) {
+        if (MyUI.get().getAccessControl().isUserPermitted("product:edit")) {
             view.editProduct(product);
         }
     }

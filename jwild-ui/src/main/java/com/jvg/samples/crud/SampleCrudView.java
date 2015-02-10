@@ -6,6 +6,7 @@ import com.jvg.samples.ResetButtonForTextField;
 import com.jvg.samples.backend.DataService;
 import com.jvg.samples.backend.data.Product;
 
+import com.vaadin.data.Container;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.SelectionEvent;
 import com.vaadin.event.SelectionEvent.SelectionListener;
@@ -24,6 +25,13 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.tylproject.vaadin.addon.MongoContainer;
+import ru.xpoft.vaadin.VaadinView;
+
+import javax.annotation.PostConstruct;
 
 /**
  * A view for performing create-read-update-delete operations on products.
@@ -31,31 +39,34 @@ import com.vaadin.ui.themes.ValoTheme;
  * See also {@link SampleCrudLogic} for fetching the data, the actual CRUD
  * operations and controlling the view based on events from outside.
  */
+@Component
+@Scope("prototype")
+@VaadinView(SampleCrudView.VIEW_NAME)
 public class SampleCrudView extends CssLayout implements View {
 
     public static final String VIEW_NAME = "Inventory";
     private ProductGrid grid;
     private ProductForm form;
 
-    private SampleCrudLogic viewLogic = new SampleCrudLogic(this);
+    @Autowired
+    DataService dataService;
+
+    private SampleCrudLogic viewLogic;
     private Button newProduct;
 
-    public SampleCrudView() {
+    @PostConstruct
+    public void Init() {
         setSizeFull();
         addStyleName("crud-view");
         HorizontalLayout topLayout = createTopBar();
 
-        grid = new ProductGrid();
-        grid.addSelectionListener(new SelectionListener() {
+        viewLogic = new SampleCrudLogic(this,dataService);
 
-            @Override
-            public void select(SelectionEvent event) {
-                viewLogic.rowSelected(grid.getSelectedRow());
-            }
-        });
+        grid = new ProductGrid((Container.Indexed)dataService.getProductsContainer());
+        grid.addSelectionListener(event -> viewLogic.rowSelected(grid.getSelectedRow()));
 
-        form = new ProductForm(viewLogic);
-        form.setCategories(DataService.get().getAllCategories());
+        form = new ProductForm(viewLogic,dataService);
+        form.setCategories(dataService.getAllCategories());
 
         VerticalLayout barAndGridLayout = new VerticalLayout();
         barAndGridLayout.addComponent(topLayout);
@@ -78,22 +89,12 @@ public class SampleCrudView extends CssLayout implements View {
         filter.setInputPrompt("Filter");
         ResetButtonForTextField.extend(filter);
         filter.setImmediate(true);
-        filter.addTextChangeListener(new FieldEvents.TextChangeListener() {
-            @Override
-            public void textChange(FieldEvents.TextChangeEvent event) {
-                grid.setFilter(event.getText());
-            }
-        });
+        filter.addTextChangeListener(event -> grid.setFilter(event.getText()));
 
         newProduct = new Button("New product");
         newProduct.addStyleName(ValoTheme.BUTTON_PRIMARY);
         newProduct.setIcon(FontAwesome.PLUS_CIRCLE);
-        newProduct.addClickListener(new ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent event) {
-                viewLogic.newProduct();
-            }
-        });
+        newProduct.addClickListener(event -> viewLogic.newProduct());
 
         HorizontalLayout topLayout = new HorizontalLayout();
         topLayout.setSpacing(true);
@@ -147,7 +148,10 @@ public class SampleCrudView extends CssLayout implements View {
     }
 
     public void showProducts(Collection<Product> products) {
-        grid.setProducts(products);
+
+        MongoContainer<Product> mongoContainer = (MongoContainer<Product>)grid.getContainerDataSource();
+        mongoContainer.refresh();
+        //table.refreshRowCache();
     }
 
     public void refreshProduct(Product product) {

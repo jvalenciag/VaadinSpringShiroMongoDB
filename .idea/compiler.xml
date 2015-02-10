@@ -30,11 +30,11 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="jwild" target="1.7" />
-      <module name="jwild-backend" target="1.7" />
-      <module name="jwild-production" target="1.7" />
-      <module name="jwild-ui" target="1.7" />
-      <module name="jwild-widgetset" target="1.7" />
+      <module name="jwild" target="1.8" />
+      <module name="jwild-backend" target="1.8" />
+      <module name="jwild-production" target="1.8" />
+      <module name="jwild-ui" target="1.8" />
+      <module name="jwild-widgetset" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

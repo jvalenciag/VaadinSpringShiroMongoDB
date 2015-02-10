@@ -12,9 +12,12 @@
 		<vaadin.version>7.4.0.beta3</vaadin.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<jetty.plugin.version>9.2.7.v20150116</jetty.plugin.version>
-		<project.source.version>1.7</project.source.version>
-		<project.target.version>1.7</project.target.version>
+		<project.source.version>1.8</project.source.version>
+		<project.target.version>1.8</project.target.version>
 		<project.encoding>UTF-8</project.encoding>
+        <logger.version>2.1</logger.version>
+        <spring.version>4.1.4.RELEASE</spring.version>
+        <spring-data-mongodb.version>1.6.2.RELEASE</spring-data-mongodb.version>
 	</properties>
 
 	<build>
@@ -102,6 +105,144 @@
 				<artifactId>vaadin-themes</artifactId>
 				<version>${vaadin.version}</version>
 			</dependency>
+
+            <!--Logging-->
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>${logger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${logger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-slf4j-impl</artifactId>
+                <version>${logger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-1.2-api</artifactId>
+                <version>${logger.version}</version>
+            </dependency>
+
+            <!--Spring dependencies-->
+            <dependency>
+                <groupId>ru.xpoft.vaadin</groupId>
+                <artifactId>spring-vaadin-integration</artifactId>
+                <version>3.1</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-web</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework.data</groupId>
+                        <artifactId>spring-data-mongodb</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-expression</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>${spring-data-mongodb.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-expression</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-tx</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-core</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-test</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
+            <!--Apache Shiro-->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>1.2.3</version>
+            </dependency>
+
+            <!--MongoDB-->
+            <dependency>
+                <groupId>org.mongodb</groupId>
+                <artifactId>mongo-java-driver</artifactId>
+                <version>2.12.4</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.tylproject.vaadin.addon.mongodbcontainer</groupId>
+                <artifactId>mongodbcontainer-addon</artifactId>
+                <version>0.9.6-beta</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.data</groupId>
+                        <artifactId>spring-data-mongodb</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>18.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>1.7.10</version>
+            </dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

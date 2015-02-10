@@ -6,6 +6,7 @@ import java.util.Locale;
 import com.jvg.samples.backend.data.Availability;
 import com.jvg.samples.backend.data.Product;
 
+import com.vaadin.data.Container;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.MethodProperty;
@@ -52,13 +53,11 @@ public class ProductGrid extends Grid {
         };
     };
 
-    public ProductGrid() {
+    public ProductGrid(Container.Indexed container) {
         setSizeFull();
 
         setSelectionMode(SelectionMode.SINGLE);
 
-        BeanItemContainer<Product> container = new BeanItemContainer<Product>(
-                Product.class);
         setContainerDataSource(container);
         setColumnOrder("id", "productName", "price", "availability",
                 "stockCount", "category");
@@ -73,7 +72,7 @@ public class ProductGrid extends Grid {
                 }
 
                 return super.convertToPresentation(value, targetType, locale);
-            };
+            }
         });
 
         // Add an traffic light icon in front of availability

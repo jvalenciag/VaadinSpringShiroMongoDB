@@ -5,6 +5,11 @@ import java.util.List;
 import com.jvg.samples.backend.DataService;
 import com.jvg.samples.backend.data.Category;
 import com.jvg.samples.backend.data.Product;
+import com.vaadin.data.Container;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.tylproject.vaadin.addon.MongoContainer;
 
 /**
  * Mock data model. This implementation has very simplistic locking and does not
@@ -12,71 +17,46 @@ import com.jvg.samples.backend.data.Product;
  */
 public class MockDataService extends DataService {
 
-    private static MockDataService INSTANCE;
+    @Autowired
+    public MongoTemplate mongoTemplate;
 
-    private List<Product> products;
-    private List<Category> categories;
-    private int nextProductId = 0;
+     public MockDataService() {
 
-    private MockDataService() {
-        categories = MockDataGenerator.createCategories();
-        products = MockDataGenerator.createProducts(categories);
-        nextProductId = products.size() + 1;
-    }
-
-    public synchronized static DataService getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new MockDataService();
-        }
-        return INSTANCE;
     }
 
     @Override
     public synchronized List<Product> getAllProducts() {
-        return products;
+        return mongoTemplate.findAll(Product.class);
     }
 
     @Override
     public synchronized List<Category> getAllCategories() {
-        return categories;
+        return mongoTemplate.findAll(Category.class);
+    }
+
+    @Override
+    public Container getCategoriesContainer() {
+        return MongoContainer.Builder.forEntity(Category.class,mongoTemplate).build();
+    }
+
+    @Override
+    public Container getProductsContainer() {
+        return MongoContainer.Builder.forEntity(Product.class, mongoTemplate).build();
+        //.withFilterConverter(new MongoFilterConverter())
     }
 
     @Override
     public synchronized void updateProduct(Product p) {
-        if (p.getId() < 0) {
-            // New product
-            p.setId(nextProductId++);
-            products.add(p);
-            return;
-        }
-        for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getId() == p.getId()) {
-                products.set(i, p);
-                return;
-            }
-        }
-
-        throw new IllegalArgumentException("No product with id " + p.getId()
-                + " found");
+        mongoTemplate.save(p);
     }
 
     @Override
-    public synchronized Product getProductById(int productId) {
-        for (int i = 0; i < products.size(); i++) {
-            if (products.get(i).getId() == productId) {
-                return products.get(i);
-            }
-        }
-        return null;
+    public synchronized Product getProductById(Object productId) {
+        return mongoTemplate.findById(productId,Product.class);
     }
 
     @Override
-    public synchronized void deleteProduct(int productId) {
-        Product p = getProductById(productId);
-        if (p == null) {
-            throw new IllegalArgumentException("Product with id " + productId
-                    + " not found");
-        }
-        products.remove(p);
+    public synchronized void deleteProduct(Object productId) {
+        mongoTemplate.remove(productId,Product.COLLECTION_NAME);
     }
 }

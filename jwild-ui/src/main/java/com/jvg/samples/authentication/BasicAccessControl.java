@@ -37,4 +37,12 @@ public class BasicAccessControl implements AccessControl {
         return CurrentUser.get();
     }
 
+    @Override
+    public boolean isUserPermitted(String permission) {
+        return false;
+    }
+
+    @Override
+    public void logout() {
+    }
 }

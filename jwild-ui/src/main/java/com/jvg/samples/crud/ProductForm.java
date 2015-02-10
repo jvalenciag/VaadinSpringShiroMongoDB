@@ -30,12 +30,14 @@ import com.vaadin.ui.Notification.Type;
  */
 public class ProductForm extends ProductFormDesign {
 
+    DataService dataService;
     private SampleCrudLogic viewLogic;
     private BeanFieldGroup<Product> fieldGroup;
 
-    public ProductForm(SampleCrudLogic sampleCrudLogic) {
+    public ProductForm(SampleCrudLogic sampleCrudLogic, DataService ds) {
         super();
         viewLogic = sampleCrudLogic;
+        dataService = ds;
 
         price.setConverter(new EuroConverter());
 
@@ -67,7 +69,7 @@ public class ProductForm extends ProductFormDesign {
             @Override
             public void postCommit(CommitEvent commitEvent)
                     throws CommitException {
-                DataService.get().updateProduct(
+                dataService.updateProduct(
                         fieldGroup.getItemDataSource().getBean());
             }
         });
@@ -136,7 +138,7 @@ public class ProductForm extends ProductFormDesign {
         BeanItem<Product> item = fieldGroup.getItemDataSource();
         if (item != null) {
             Product product = item.getBean();
-            canRemoveProduct = product.getId() != -1;
+            canRemoveProduct = product.getId() != null;
         }
         delete.setEnabled(canRemoveProduct);
     }

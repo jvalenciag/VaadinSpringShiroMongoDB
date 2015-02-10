@@ -1,5 +1,10 @@
 package com.jvg.samples.backend.data;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -8,26 +13,30 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+@Document(collection = Product.COLLECTION_NAME)
 public class Product implements Serializable {
 
-    @NotNull
-    private int id = -1;
+    public static final String COLLECTION_NAME = "product";
+
+    @Id
+    private ObjectId id;
     @NotNull
     @Size(min = 2, message = "Product name must have at least two characters")
     private String productName = "";
     @Min(0)
     private BigDecimal price = BigDecimal.ZERO;
+    @DBRef
     private Set<Category> category;
     @Min(value = 0, message = "Can't have negative amount in stock")
-    private int stockCount = 0;
+    private Integer stockCount = 0;
     @NotNull
     private Availability availability = Availability.COMING;
 
-    public int getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 

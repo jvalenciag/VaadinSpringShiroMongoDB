@@ -112,11 +112,13 @@ public class LoginScreen extends CssLayout {
     }
 
     private void login() {
-        if (accessControl.signIn(username.getValue(), password.getValue())) {
+        try {
+            accessControl.signIn(username.getValue(), password.getValue());
             loginListener.loginSuccessful();
-        } else {
+        } catch (Exception e){
             showNotification(new Notification("Login failed",
-                    "Please check your username and password and try again.",
+                    e.getLocalizedMessage(),
+                    //"Please check your username and password and try again.",
                     Notification.Type.HUMANIZED_MESSAGE));
             username.focus();
         }

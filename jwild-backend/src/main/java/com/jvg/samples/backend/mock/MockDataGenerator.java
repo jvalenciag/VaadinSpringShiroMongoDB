@@ -10,6 +10,7 @@ import java.util.Set;
 import com.jvg.samples.backend.data.Availability;
 import com.jvg.samples.backend.data.Category;
 import com.jvg.samples.backend.data.Product;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 public class MockDataGenerator {
     private static int nextCategoryId = 1;
@@ -37,20 +38,22 @@ public class MockDataGenerator {
             "speaking to a big audience", "creating software", "giant needles",
             "elephants", "keeping your wife happy" };
 
-    static List<Category> createCategories() {
+    public static List<Category> createCategories(MongoTemplate mo) {
         List<Category> categories = new ArrayList<Category>();
         for (String name : categoryNames) {
             Category c = createCategory(name);
+            mo.save(c);
             categories.add(c);
         }
         return categories;
 
     }
 
-    static List<Product> createProducts(List<Category> categories) {
+    public static List<Product> createProducts(List<Category> categories, MongoTemplate mo) {
         List<Product> products = new ArrayList<Product>();
         for (int i = 0; i < 100; i++) {
             Product p = createProduct(categories);
+            mo.save(p);
             products.add(p);
         }
 
@@ -59,14 +62,12 @@ public class MockDataGenerator {
 
     private static Category createCategory(String name) {
         Category c = new Category();
-        c.setId(nextCategoryId++);
         c.setName(name);
         return c;
     }
 
     private static Product createProduct(List<Category> categories) {
         Product p = new Product();
-        p.setId(nextProductId++);
         p.setProductName(generateName());
 
         p.setPrice(new BigDecimal((random.nextInt(250) + 50) / 10.0));

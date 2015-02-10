@@ -9,6 +9,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.HorizontalLayout;
+import ru.xpoft.vaadin.DiscoveryNavigator;
 
 /**
  * Content of the UI when the user is logged in.
@@ -26,7 +27,9 @@ public class MainScreen extends HorizontalLayout {
         viewContainer.addStyleName("valo-content");
         viewContainer.setSizeFull();
 
-        final Navigator navigator = new Navigator(ui, viewContainer);
+        //final Navigator navigator = new Navigator(ui, viewContainer);
+        final Navigator navigator = new DiscoveryNavigator(ui, viewContainer);
+
         navigator.setErrorView(ErrorView.class);
         menu = new Menu(navigator);
         menu.addView(new SampleCrudView(), SampleCrudView.VIEW_NAME,
