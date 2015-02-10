@@ -3,7 +3,6 @@ package com.jvg.samples.crud;
 import com.jvg.MyUI;
 import com.jvg.samples.backend.DataService;
 import com.jvg.samples.backend.data.Product;
-
 import com.vaadin.server.Page;
 import org.bson.types.ObjectId;
 
@@ -34,7 +33,7 @@ public class SampleCrudLogic {
             view.setNewProductEnabled(false);
         }
 
-        view.showProducts(dataService.getAllProducts());
+        refreshTable();
     }
 
     public void cancelProduct() {
@@ -66,12 +65,10 @@ public class SampleCrudLogic {
             } else {
                 // Ensure this is selected even if coming directly here from
                 // login
-                try {
                     ObjectId pid = new ObjectId(productId);
                     Product product = findProduct(pid);
-                    view.selectRow(product);
-                } catch (NumberFormatException e) {
-                }
+                    if(product!=null)
+                        view.selectRow(product);
             }
         }
     }
@@ -85,7 +82,7 @@ public class SampleCrudLogic {
                 + product.getId() + ") updated");
         view.clearSelection();
         view.editProduct(null);
-        view.refreshProduct(product);
+        refreshTable();
         setFragmentParameter("");
     }
 
@@ -96,7 +93,7 @@ public class SampleCrudLogic {
 
         view.clearSelection();
         view.editProduct(null);
-        view.removeProduct(product);
+        refreshTable();
         setFragmentParameter("");
     }
 
@@ -107,6 +104,12 @@ public class SampleCrudLogic {
             setFragmentParameter(product.getId() + "");
         }
         view.editProduct(product);
+    }
+
+    private void refreshTable() {
+        Product oldSelection = view.getSelectedRow();
+        view.showProducts();
+        view.selectRow(oldSelection);
     }
 
     public void newProduct() {

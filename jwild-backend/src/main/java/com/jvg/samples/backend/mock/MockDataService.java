@@ -1,15 +1,16 @@
 package com.jvg.samples.backend.mock;
 
-import java.util.List;
-
 import com.jvg.samples.backend.DataService;
 import com.jvg.samples.backend.data.Category;
 import com.jvg.samples.backend.data.Product;
 import com.vaadin.data.Container;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.tylproject.vaadin.addon.MongoContainer;
+
+import java.util.List;
 
 /**
  * Mock data model. This implementation has very simplistic locking and does not
@@ -57,6 +58,7 @@ public class MockDataService extends DataService {
 
     @Override
     public synchronized void deleteProduct(Object productId) {
-        mongoTemplate.remove(productId,Product.COLLECTION_NAME);
+
+        mongoTemplate.remove( new Query(Criteria.where("id").is(productId)),Product.class);
     }
 }
