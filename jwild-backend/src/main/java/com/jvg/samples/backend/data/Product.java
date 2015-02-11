@@ -5,13 +5,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Set;
-
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Set;
 
 @Document(collection = Product.COLLECTION_NAME)
 public class Product implements Serializable {
@@ -64,11 +63,11 @@ public class Product implements Serializable {
         this.category = category;
     }
 
-    public int getStockCount() {
+    public Integer getStockCount() {
         return stockCount;
     }
 
-    public void setStockCount(int stockCount) {
+    public void setStockCount(Integer stockCount) {
         this.stockCount = stockCount;
     }
 

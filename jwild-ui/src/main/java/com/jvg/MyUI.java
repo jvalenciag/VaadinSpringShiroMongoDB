@@ -1,23 +1,23 @@
 package com.jvg;
 
-import javax.servlet.annotation.WebInitParam;
-import javax.servlet.annotation.WebServlet;
-
 import com.jvg.samples.MainScreen;
 import com.jvg.samples.authentication.AccessControl;
-import com.jvg.samples.authentication.BasicAccessControl;
 import com.jvg.samples.authentication.LoginScreen;
-import com.jvg.samples.authentication.LoginScreen.LoginListener;
-
-import com.vaadin.annotations.*;
+import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.annotations.Viewport;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.xpoft.vaadin.SpringVaadinServlet;
+
+import javax.servlet.annotation.WebInitParam;
+import javax.servlet.annotation.WebServlet;
 
 /**
  * Main UI class of the application that shows either the login screen or the
@@ -35,7 +35,8 @@ import ru.xpoft.vaadin.SpringVaadinServlet;
 //@Push
 public class MyUI extends UI {
 
-    private AccessControl accessControl = new BasicAccessControl();
+    @Autowired
+    private AccessControl accessControl;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {

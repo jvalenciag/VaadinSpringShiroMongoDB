@@ -1,29 +1,15 @@
 package com.jvg.samples.crud;
 
-import java.util.Collection;
-
 import com.jvg.samples.ResetButtonForTextField;
 import com.jvg.samples.backend.DataService;
 import com.jvg.samples.backend.data.Product;
-
 import com.vaadin.data.Container;
-import com.vaadin.event.FieldEvents;
-import com.vaadin.event.SelectionEvent;
-import com.vaadin.event.SelectionEvent.SelectionListener;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Grid.SelectionModel;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.Notification.Type;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -32,6 +18,7 @@ import org.tylproject.vaadin.addon.MongoContainer;
 import ru.xpoft.vaadin.VaadinView;
 
 import javax.annotation.PostConstruct;
+import java.util.Collection;
 
 /**
  * A view for performing create-read-update-delete operations on products.
@@ -149,14 +136,13 @@ public class SampleCrudView extends CssLayout implements View {
 
     public void showProducts(Collection<Product> products) {
 
-        MongoContainer<Product> mongoContainer = (MongoContainer<Product>)grid.getContainerDataSource();
+        MongoContainer<Product> mongoContainer = grid.getContainer();
         mongoContainer.refresh();
-        //table.refreshRowCache();
     }
 
     public void refreshProduct(Product product) {
         grid.refresh(product);
-        grid.scrollTo(product);
+        grid.scrollTo(product.getId());
     }
 
     public void removeProduct(Product product) {

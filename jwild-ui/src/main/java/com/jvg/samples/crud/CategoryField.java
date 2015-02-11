@@ -1,18 +1,13 @@
 package com.jvg.samples.crud;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.jvg.samples.backend.data.Category;
-
-import com.vaadin.data.util.converter.Converter.ConversionException;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomField;
 import com.vaadin.ui.VerticalLayout;
+import org.bson.types.ObjectId;
+
+import java.util.*;
 
 /**
  * A custom Field implementation that allows selecting a set of categories using
@@ -21,7 +16,8 @@ import com.vaadin.ui.VerticalLayout;
 public class CategoryField extends CustomField<Set<Category>> {
 
     private VerticalLayout options;
-    private Map<Category, CheckBox> checkboxes = new HashMap<Category, CheckBox>();
+    private Map<ObjectId, CheckBox> checkboxes = new HashMap<ObjectId, CheckBox>();
+
     private boolean updatingField = false;
 
     public CategoryField() {
@@ -50,7 +46,7 @@ public class CategoryField extends CustomField<Set<Category>> {
         checkboxes.clear();
         for (final Category category : categories) {
             final CheckBox box = new CheckBox(category.getName());
-            checkboxes.put(category, box);
+            checkboxes.put(category.getId(), box);
             box.addValueChangeListener(new ValueChangeListener() {
 
                 @Override
@@ -86,13 +82,12 @@ public class CategoryField extends CustomField<Set<Category>> {
     protected void setInternalValue(Set<Category> newValue) {
         updatingField = true;
         super.setInternalValue(newValue);
+        for (Object category : checkboxes.keySet()) {
+            checkboxes.get(category).setValue(false);
+        }
         if (newValue != null) {
-            for (Category category : checkboxes.keySet()) {
-                checkboxes.get(category).setValue(newValue.contains(category));
-            }
-        } else {
-            for (Category category : checkboxes.keySet()) {
-                checkboxes.get(category).setValue(false);
+            for (Category category : newValue) {
+                checkboxes.get(category.getId()).setValue(newValue.contains(category));
             }
         }
         updatingField = false;

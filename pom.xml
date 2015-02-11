@@ -222,7 +222,7 @@
             <dependency>
                 <groupId>org.tylproject.vaadin.addon.mongodbcontainer</groupId>
                 <artifactId>mongodbcontainer-addon</artifactId>
-                <version>0.9.6-beta</version>
+                <version>0.9.6.1-beta</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.springframework.data</groupId>

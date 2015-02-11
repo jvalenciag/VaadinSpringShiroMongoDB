@@ -1,14 +1,10 @@
 package com.jvg.samples.crud;
 
-import java.util.Collection;
-import java.util.Locale;
-
 import com.jvg.samples.backend.data.Availability;
 import com.jvg.samples.backend.data.Product;
-
 import com.vaadin.data.Container;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.util.GeneratedPropertyContainer;
 import com.vaadin.data.util.MethodProperty;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.converter.StringToEnumConverter;
@@ -18,6 +14,9 @@ import com.vaadin.data.util.filter.SimpleStringFilter;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.renderer.HtmlRenderer;
+import org.tylproject.vaadin.addon.MongoContainer;
+
+import java.util.Locale;
 
 /**
  * Grid of products, handling the visual presentation and filtering of a set of
@@ -57,10 +56,37 @@ public class ProductGrid extends Grid {
         setSizeFull();
 
         setSelectionMode(SelectionMode.SINGLE);
-
-        setContainerDataSource(container);
-        setColumnOrder("id", "productName", "price", "availability",
+        GeneratedPropertyContainer gcont = new GeneratedPropertyContainer(container);
+        gcont.removeContainerProperty("id");
+        setContainerDataSource(gcont);
+        setColumnOrder(/*"id",*/ "productName", "price", "availability",
                 "stockCount", "category");
+        this.
+        /*getColumn("id").setConverter(new Converter<String, ObjectId >() {
+
+            @Override
+            public ObjectId convertToModel(String value, Class<? extends ObjectId> targetType, Locale locale) throws ConversionException {
+                return new ObjectId(value);
+            }
+
+            @Override
+            public String convertToPresentation(ObjectId value, Class<? extends String> targetType, Locale locale) throws ConversionException {
+                return value.toString();
+            }
+
+            @Override
+            public Class<ObjectId> getModelType() {
+                return ObjectId.class;
+            }
+
+            @Override
+            public Class<String> getPresentationType() {
+                return String.class;
+            }
+        });*/
+        //getColumn("id").setMinimumWidth(10.0);
+        //getColumn("id").setMaximumWidth(24.0);
+
         // Show empty stock as "-"
         getColumn("stockCount").setConverter(new StringToIntegerConverter() {
             @Override
@@ -121,31 +147,32 @@ public class ProductGrid extends Grid {
 
     }
 
-    private BeanItemContainer<Product> getContainer() {
-        return (BeanItemContainer<Product>) super.getContainerDataSource();
+    public MongoContainer<Product> getContainer() {
+        return (MongoContainer<Product>)((GeneratedPropertyContainer)super.getContainerDataSource()).getWrappedContainer();
     }
 
     @Override
     public Product getSelectedRow() throws IllegalStateException {
-        return (Product) super.getSelectedRow();
+        if(super.getSelectedRow()==null) return null;
+        return (Product) getContainer().getItem(super.getSelectedRow()).getBean();
     }
 
-    public void setProducts(Collection<Product> products) {
+    /*public void setProducts(Collection<Product> products) {
         getContainer().removeAllItems();
         getContainer().addAll(products);
-    }
+    }*/
 
     public void refresh(Product product) {
         // We avoid updating the whole table through the backend here so we can
         // get a partial update for the grid
-        BeanItem<Product> item = getContainer().getItem(product);
+        BeanItem<Product> item = getContainer().getItem(product.getId());
         if (item != null) {
             // Updated product
             MethodProperty p = (MethodProperty) item.getItemProperty("id");
             p.fireValueChange();
         } else {
             // New product
-            getContainer().addBean(product);
+            getContainer().addEntity(product);
         }
     }
 

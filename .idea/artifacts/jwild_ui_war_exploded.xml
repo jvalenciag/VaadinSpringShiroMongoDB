@@ -23,7 +23,7 @@
             <element id="module-output" name="jwild-backend" />
           </element>
           <element id="library" level="project" name="Maven: javax.validation:validation-api:1.1.0.Final" />
-          <element id="library" level="project" name="Maven: org.tylproject.vaadin.addon.mongodbcontainer:mongodbcontainer-addon:0.9.6-beta" />
+          <element id="library" level="project" name="Maven: org.tylproject.vaadin.addon.mongodbcontainer:mongodbcontainer-addon:0.9.6.1-beta" />
           <element id="library" level="project" name="Maven: com.google.code.findbugs:jsr305:2.0.1" />
           <element id="library" level="project" name="Maven: org.springframework.data:spring-data-mongodb:1.6.2.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.data:spring-data-commons:1.9.2.RELEASE" />
