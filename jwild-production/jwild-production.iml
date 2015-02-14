@@ -20,6 +20,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.vaadin:vaadin-push:7.4.0.beta3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.vaadin:vaadin-themes:7.4.0.beta3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.vaadin:vaadin-push:7.4.0.beta3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.vaadin:vaadin-themes:7.4.0.beta3" level="project" />
     <orderEntry type="module" module-name="jwild-ui" scope="RUNTIME" />
     <orderEntry type="module" module-name="jwild-ui" scope="PROVIDED" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.vaadin:vaadin-server:7.4.0.rc1" level="project" />
@@ -58,6 +62,7 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.slf4j:slf4j-api:1.7.10" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.apache.logging.log4j:log4j-1.2-api:2.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: ru.xpoft.vaadin:spring-vaadin-integration:3.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.vaadin:vaadin-spring:1.0.0.alpha1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-web:4.1.4.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework:spring-aop:4.1.4.RELEASE" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: aopalliance:aopalliance:1.0" level="project" />

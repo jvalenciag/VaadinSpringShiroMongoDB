@@ -7,7 +7,7 @@
         <setting name="compilerParameters" value="-draftCompile" />
         <setting name="compilerMaxHeapSize" value="512" />
         <setting name="gwtScriptOutputStyle" value="DETAILED" />
-        <setting name="gwtSdkUrl" value="file://C:\Users\JoséLuis\.m2\repository/com/vaadin/vaadin-client/7.4.0.rc1" />
+        <setting name="gwtSdkUrl" value="file://C:\Users\COVICEL\.m2\repository/com/vaadin/vaadin-client/7.4.0.rc1" />
         <setting name="gwtSdkType" value="Vaadin-Maven" />
       </configuration>
     </facet>
